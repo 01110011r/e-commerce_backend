@@ -11,6 +11,11 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
     constructor (@InjectModel('Users') private userModel: Model<UserType>) {}
 
+
+    private async omitPassword(user: UserType) {
+return await this.userModel.findOne({username: user.username}).select('-password');
+    }
+
       async create(userDTO: AuthDTO) {
         const {username, password} = userDTO;
 
@@ -20,8 +25,8 @@ export class UserService {
             throw new HttpException('username is already exists', HttpStatus.UNAUTHORIZED)
         }
 
-        const newUser = this.userModel.create(userDTO);
+        const newUser = (await this.userModel.create(userDTO));
 
-        return newUser;
+        return this.omitPassword(newUser);
       }  
 }
