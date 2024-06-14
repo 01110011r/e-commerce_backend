@@ -3,17 +3,15 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserType } from "src/Types/user";
 import { AuthDTO } from "./dto/auth-dto";
-import * as bcrypt from 'bcrypt';
-
 
 
 @Injectable()
 export class UserService {
-    constructor (@InjectModel('Users') private userModel: Model<UserType>) {}
+    constructor (@InjectModel('User') private userModel: Model<UserType>) {}
 
 
-    private async omitPassword(user: UserType) {
-return await this.userModel.findOne({username: user.username}).select('-password');
+    private async omitPassword(username: string) {
+return await this.userModel.findOne({username}).select('-password');
     }
 
       async create(userDTO: AuthDTO) {
@@ -27,6 +25,11 @@ return await this.userModel.findOne({username: user.username}).select('-password
 
         const newUser = (await this.userModel.create(userDTO));
 
-        return this.omitPassword(newUser);
+        return this.omitPassword(newUser.username);
       }  
+
+
+      async findByUsername(userDTO: AuthDTO) {
+        return this.omitPassword(userDTO.username)
+      }
 }

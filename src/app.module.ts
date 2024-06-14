@@ -7,7 +7,7 @@ import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    // ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.REMOTE_DB_URL),
     SharedModule
   ],
