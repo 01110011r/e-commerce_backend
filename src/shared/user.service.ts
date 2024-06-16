@@ -15,7 +15,7 @@ return await this.userModel.findOne({username}).select('-password');
     }
 
       async create(userDTO: AuthDTO) {
-        const {username, password} = userDTO;
+        const { username } = userDTO;
 
         const user = await this.userModel.findOne({username});
 

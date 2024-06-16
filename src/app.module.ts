@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    // ConfigModule.forRoot(),
+    ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.REMOTE_DB_URL),
-    SharedModule
+    SharedModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
