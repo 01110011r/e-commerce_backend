@@ -4,17 +4,17 @@ import { AuthService } from "./auth.service";
 import { SharedModule } from "src/shared/shared.module";
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from "@nestjs/jwt";
-import { jwtConstants } from "./constants";
 import { ConfigModule } from "@nestjs/config";
+import constants from "./constants";
 
 
 @Module({
     imports: [
-        // ConfigModule.forFeature(),
+        ConfigModule.forRoot(),
         SharedModule,
         PassportModule,
         JwtModule.register({
-            secret: jwtConstants.secret,
+            secretOrPrivateKey: constants().secret,
             signOptions: { expiresIn: '30d' }
         })
     ],
