@@ -30,6 +30,6 @@ return await this.userModel.findOne({username}).select('-password');
 
 
       async findByUsername(userDTO: AuthDTO) {
-        return this.omitPassword(userDTO.username)
+        return this.userModel.findOne({username:userDTO.username});
       }
 }
