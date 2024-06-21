@@ -20,11 +20,11 @@ console.log(authDTO.password, user);
 
         if(user) {
             if(await bcrypt.compare(authDTO.password, user.password)){
-                return {username: user.username };
+                return {username: user.username, suitable: true, msg: null };
             }
-            return {msg: "Invalid password  :("};
+            return {username: null, suitable: false,msg: "Invalid password  :("};
         }
-        return {};
+        return {username: null, suitable: false, msg: 'Oops sorry, User not found :('};
     }
 
     async Register(authDTO: AuthDTO) {
@@ -43,7 +43,7 @@ console.log(authDTO.password, user);
 
         const check = await this.validateUser(authDTO);
 
-       if(check.username) {
+       if(check.suitable) {
 
         const payload = {
             username: check.username
