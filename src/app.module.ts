@@ -7,6 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 import constants from './auth/constants';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import constants from './auth/constants';
     }),
     MongooseModule.forRoot(configuration().db.local_db_url),
     SharedModule,
-    AuthModule
+    AuthModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
