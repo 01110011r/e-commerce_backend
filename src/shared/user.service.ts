@@ -29,7 +29,7 @@ return await this.userModel.findOne({username}).select('-password');
       }  
 
 
-      async findByUsername(userDTO: AuthDTO) {
-        return this.userModel.findOne({username:userDTO.username});
+      async findByUsername(username: string) {
+        return this.userModel.findOne({username});
       }
 }

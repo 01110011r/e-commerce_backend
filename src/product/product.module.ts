@@ -3,6 +3,9 @@ import { ProductController } from "./product.controller";
 import { ProductService } from "./product.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ProductSchema } from "src/Models/product.schema";
+import { SharedModule } from '../shared/shared.module';
+import { JwtModule } from '@nestjs/jwt';
+import { UserSchema } from '../Models/user.schema';
 
 
 
@@ -12,8 +15,14 @@ import { ProductSchema } from "src/Models/product.schema";
             {
                 name: "Product",
                 schema: ProductSchema
+            },
+            {
+                name: "User",
+                schema: UserSchema
             }
-        ])
+        ]),
+      SharedModule,
+      JwtModule
     ],
     controllers: [ProductController],
     providers: [ProductService]
