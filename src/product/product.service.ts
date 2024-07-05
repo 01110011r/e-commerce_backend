@@ -12,7 +12,7 @@ import { UpdateProductDTO } from './dto/update-product.dto';
 export class ProductService {
 
     constructor(
-        @InjectModel('Product') private productModel: Model<ProductType>,
+        @InjectModel('Products') private productModel: Model<ProductType>,
         private userService: UserService,
         private jwtService: JwtService
     ) {}
@@ -45,6 +45,7 @@ export class ProductService {
 
 
     async Update(id:string, updateProductDTO: UpdateProductDTO) {
+
         const username = this.jwtService.decode(updateProductDTO.owner)?.username;
 
         if(!username) {
@@ -53,11 +54,13 @@ export class ProductService {
 
         const user = await this.userService.findByUsername(username);
 
-        if(user?._id != id) {
+        const product = await this.productModel.findById(id);
+
+        if(user?._id != product?.owner.toString()) {
             throw new HttpException('You are not the owner of this product', HttpStatus.BAD_REQUEST);
         }
-
-        return await this.productModel.findByIdAndUpdate(id, updateProductDTO);
+        updateProductDTO.owner= user._id as string;
+        return this.productModel.findByIdAndUpdate(id, updateProductDTO);
 
     }
 
@@ -71,7 +74,9 @@ export class ProductService {
 
         const user = await this.userService.findByUsername(username);
 
-        if(user?._id != id) {
+        const product = await this.productModel.findById(id);
+
+        if(user?._id != product?.owner.toString()) {
             throw new HttpException('You are not the owner of this product.', HttpStatus.BAD_REQUEST);
         }
 

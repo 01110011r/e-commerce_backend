@@ -28,7 +28,7 @@ console.log('controller '+authToken)
         return this.productService.ShowOne(req.params.id);
     }
 
-    @Put(':id')
+    @Put('update/:id')
     async Update(@Req() req: Request, @Body() updateProductDTO: UpdateProductDTO, @Headers('authorization') authToken: string) {
         updateProductDTO.owner = authToken;
         return this.productService.Update(req.params.id, updateProductDTO);

@@ -7,7 +7,7 @@ import { AuthDTO } from "./dto/auth-dto";
 
 @Injectable()
 export class UserService {
-    constructor (@InjectModel('User') private userModel: Model<UserType>) {}
+    constructor (@InjectModel('Users') private userModel: Model<UserType>) {}
 
 
     private async omitPassword(username: string) {

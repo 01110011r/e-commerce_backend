@@ -7,7 +7,7 @@ import { UserSchema } from "src/Models/user.schema";
     imports: [
         MongooseModule.forFeature([
         {
-            name: 'User',
+            name: 'Users',
             schema: UserSchema
         }
     ])

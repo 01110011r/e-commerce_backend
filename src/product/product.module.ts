@@ -13,12 +13,8 @@ import { UserSchema } from '../Models/user.schema';
     imports: [
         MongooseModule.forFeature([
             {
-                name: "Product",
+                name: "Products",
                 schema: ProductSchema
-            },
-            {
-                name: "User",
-                schema: UserSchema
             }
         ]),
       SharedModule,
