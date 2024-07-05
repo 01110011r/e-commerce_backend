@@ -3,15 +3,16 @@ import { AppModule } from './app.module';
 import configuration from './config/configuration';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-  .setTitle('e-commerce')
+  .setTitle('E-commerce')
   .setDescription('simple testable ')
   .setVersion('1.0')
-  .addTag('tag')
   .addBearerAuth()
   .build();
 
@@ -21,7 +22,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('swagger', app, docs);
 
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(configuration().port, () => console.log("server is running on port " + configuration().port));
 }
 bootstrap();

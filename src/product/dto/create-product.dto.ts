@@ -1,27 +1,34 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsNumberString, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDTO {
-    
+
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     title: string;
     description: string;
-    
+
+    @ApiProperty()
     @IsNotEmpty()
-    @IsNumber()
+    @IsNumberString()
     price: number;
 
+    @ApiProperty()
     @IsNotEmpty()
-    @IsNumber()
+    @IsNumberString()
     quantity: number;
 
-    @IsNotEmpty()
-    @IsString()
+    @ApiProperty()
+    // @IsNotEmpty()
+    // @IsString()
     img: string;
 
+    @ApiProperty()
     @IsNotEmpty()
     measurement: ['countable', 'kg', 'm'];
 
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     owner: string;

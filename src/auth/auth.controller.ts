@@ -2,9 +2,10 @@ import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthDTO } from "src/shared/dto/auth-dto";
 import { AuthGuard } from "@nestjs/passport";
+import { ApiTags } from '@nestjs/swagger';
 
 
-
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
 
