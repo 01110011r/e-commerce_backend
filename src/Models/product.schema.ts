@@ -7,7 +7,7 @@ export const ProductSchema = new mongoose.Schema({
     quantity:Number,
     img: String,
     measurement: ['countable', 'kg', 'm'],
-    owner: {
+    ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users'
     }

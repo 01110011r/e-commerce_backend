@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Post, Headers, Req, Put, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Post,
+    Headers,
+    Req,
+    Put,
+    Delete,
+    UseInterceptors,
+    UploadedFile,
+    Query,
+} from '@nestjs/common';
 import { ProductService } from "./product.service";
 import { CreateProductDTO } from "./dto/create-product.dto";
 import { Express, Request } from 'express';
@@ -7,6 +19,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'node:path';
+import { QueryProductDto } from './dto/query-product.dto';
 
 @ApiTags('product')
 @Controller('product')
@@ -39,8 +52,8 @@ export class ProductController {
     }
 
     @Get('all')
-    async ShowAll() {
-        return this.productService.ShowAll();
+    async ShowAll(@Query() query: QueryProductDto) {
+        return this.productService.ShowAll(query);
     }
 
     @Get(':id')

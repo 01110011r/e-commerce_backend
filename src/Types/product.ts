@@ -7,5 +7,5 @@ export interface ProductType extends Document {
     img: String,
     quantity: Number,
     measurment: ['kg', 'dona'],
-    owner: UserType
+    ownerId: UserType
 }

@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { Express } from 'express';
 import * as fs from 'node:fs';
+import { QueryProductDto } from './dto/query-product.dto';
 
 
 @Injectable()
@@ -20,12 +21,25 @@ export class ProductService {
     ) {}
 
 
-    async ShowAll() {
-        return await this.productModel.find().populate('owner', '-password').exec();
+    async ShowAll(query: QueryProductDto) {
+
+        const queryObj = {};
+
+        if(query.title) {
+            queryObj['title'] = {$regex: query.title, $options: 'i'};
+        }
+
+        const limit = query.limit ? Number(query.limit) : 10;
+        const skip = query.page ? (Number(query.page) - 1) * limit : 0;
+
+        return await this.productModel.find(queryObj)
+          .limit(limit)
+          .skip(skip)
+          .populate('ownerId', '-password').exec();
     }
 
     async ShowOne(id:string) {
-        return await this.productModel.findById(id).populate('owner', '-password').exec();
+        return await this.productModel.findById(id).populate('ownerId', '-password').exec();
     }
 
     async Create(createProductDTO: CreateProductDTO, token: string, image: Express.Multer.File) {
@@ -44,7 +58,7 @@ export class ProductService {
         createProductDTO.owner = user._id as string;
         createProductDTO.img = image.filename;
 
-        return await this.productModel.create(createProductDTO);
+        return await this.productModel.create({...createProductDTO, ownerId: user._id});
     }
 
 
@@ -60,7 +74,7 @@ export class ProductService {
 
         const product = await this.productModel.findById(id);
 
-        if(user?._id != product?.owner.toString()) {
+        if(user?._id != product?.ownerId.toString()) {
             throw new HttpException('You are not the owner of this product', HttpStatus.BAD_REQUEST);
         }
 
@@ -73,8 +87,6 @@ export class ProductService {
             });
         updateProductDTO.img = img.filename;
         }
-
-        updateProductDTO.owner= user._id as string;
 
         return this.productModel.findByIdAndUpdate(id, updateProductDTO);
 
@@ -92,7 +104,7 @@ export class ProductService {
 
         const product = await this.productModel.findById(id);
 
-        if(user?._id != product?.owner.toString()) {
+        if(user?._id != product?.ownerId.toString()) {
             throw new HttpException('You are not the owner of this product.', HttpStatus.BAD_REQUEST);
         }
 
