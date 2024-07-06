@@ -21,6 +21,10 @@ export class ProductService {
     ) {}
 
 
+    async findProducts(ids:Array<string>) {
+        return await this.productModel.find({_id: { $in: ids }}).exec();
+    }
+
     async ShowAll(query: QueryProductDto) {
 
         const queryObj = {};

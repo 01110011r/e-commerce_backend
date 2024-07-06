@@ -6,6 +6,7 @@ export interface ProductType extends Document {
     description: String,
     img: String,
     quantity: Number,
+    price: Number,
     measurment: ['kg', 'dona'],
     ownerId: UserType
 }

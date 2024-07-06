@@ -10,7 +10,7 @@ export const OrderSchema = new mongoose.Schema({
     },
     products: [
         {
-            product: {
+            productId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Products'
             },
