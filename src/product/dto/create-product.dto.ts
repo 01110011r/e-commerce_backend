@@ -7,6 +7,8 @@ export class CreateProductDTO {
     @IsNotEmpty()
     @IsString()
     title: string;
+
+    @ApiProperty()
     description: string;
 
     @ApiProperty()

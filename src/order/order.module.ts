@@ -4,6 +4,8 @@ import { OrderSchema } from "src/Models/order.schema";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
 import { ProductModule } from "src/product/product.module";
+import { JwtModule } from "@nestjs/jwt";
+import { SharedModule } from "src/shared/shared.module";
 
 
 @Module({
@@ -14,7 +16,9 @@ imports:[
             schema: OrderSchema
         }
     ]),
-    ProductModule
+    ProductModule,
+    JwtModule,
+    SharedModule
 ],
 controllers: [
     OrderController

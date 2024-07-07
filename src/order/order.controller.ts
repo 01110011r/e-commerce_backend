@@ -1,9 +1,10 @@
-import { Controller, Headers, Post } from "@nestjs/common";
+import { Body, Controller, Headers, Post } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { OrderAddDTO } from "./dto/order-add.dto";
+import { AddOrderDTO } from "./dto/add-order.dto";
+import { ApiTags } from "@nestjs/swagger";
 
 
-
+@ApiTags('Order')
 @Controller('order')
 export class OrderController {
     constructor(
@@ -12,7 +13,10 @@ export class OrderController {
 
 
     @Post()
-    AddOrder(order: OrderAddDTO, @Headers('authorization') authToken: string) {
+    AddOrder(
+        @Body() order: AddOrderDTO,
+        @Headers('authorization') authToken: string
+    ) {
         return this.orderService.AddOrder(order, authToken);
     }
 

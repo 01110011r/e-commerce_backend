@@ -1,12 +1,11 @@
-import { Document } from "mongoose";
-import { UserType } from "./user";
+import { Document, Types } from "mongoose";
 import { ProductType } from "./product";
 
 export interface OrderType extends Document {
-owner: UserType,
+ownerId: Types.ObjectId,
 products: {
     product: ProductType,
     quantity: Number
 }[],
-TotalPrice: Number
+totalPrice: Number
 }

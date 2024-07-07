@@ -10,6 +10,7 @@ import constants from './auth/constants';
 import { ProductModule } from './product/product.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'node:path';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import * as path from 'node:path';
     MongooseModule.forRoot(configuration().db.local_db_url),
     SharedModule,
     AuthModule,
-    ProductModule
+    ProductModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],

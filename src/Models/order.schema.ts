@@ -1,10 +1,7 @@
 import * as mongoose from 'mongoose';
 
-
-
-
 export const OrderSchema = new mongoose.Schema({
-    owner: {
+    ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users'
     },
