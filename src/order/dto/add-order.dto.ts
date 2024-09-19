@@ -1,14 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class AddOrderDTO {
-    @ApiProperty({
-        default:{
-            productId: "",
-            quantity: 1
-        }
-    })
-    products:{
+    @ApiProperty()
     productId: string;
+    // products:{
+    @ApiProperty()
     quantity: number;
-}[];
+// }[];
 }

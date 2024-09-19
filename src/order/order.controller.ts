@@ -14,10 +14,10 @@ export class OrderController {
 
     @Post()
     AddOrder(
-        @Body() order: AddOrderDTO,
+        @Body() orders: AddOrderDTO[],
         @Headers('authorization') authToken: string
     ) {
-        return this.orderService.AddOrder(order, authToken);
+        return this.orderService.AddOrder(orders, authToken);
     }
 
 

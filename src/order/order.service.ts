@@ -19,24 +19,27 @@ constructor(
 ) {}
 
 
-private async CalcTotalPrice(order: AddOrderDTO) {
+private async CalcTotalPrice(orders: AddOrderDTO[]) {
     let totalPrice = 0;
     const ids = [],
-    quantities = [];
-    for (const p of order.products) {
-      ids.push(new Types.ObjectId(p.productId));
-      quantities.push({productId: new Types.ObjectId(p.productId) ,quantity:Number(p.quantity)});
+    properties = [];
+    // console.log(orders)
+    for (let i=0; i<orders.length; i++) {
+        // console.log(orders[i])
+      ids.push(new Types.ObjectId(orders[i].productId));
+      properties.push({productId: orders[i].productId, quantity:Number(orders[i].quantity)});
     }
-
+// console.log(ids, properties)
     const foundProducts = await this.productService.findProducts(ids);
-    if(foundProducts.length != quantities.length) {
+    if(foundProducts.length != properties.length) {
         throw new HttpException('Product not found :(', HttpStatus.BAD_REQUEST);
     }
     for (let i = 0; i<foundProducts.length; i ++) {
-        for(let j = 0; j<quantities.length; j++) {
-
-            if(foundProducts[i]?._id == quantities[j]?.productId) {
-                totalPrice += Number(foundProducts[i].price) * Number(quantities[j].quantity);
+        for(let j = 0; j<properties.length; j++) {
+            if(foundProducts[i]?._id == properties[j]?.productId) {
+                console.log('???---> '+foundProducts[i]?._id == properties[j]?.productId)
+                // console.log(totalPrice)
+                totalPrice += Number(foundProducts[i].price) * Number(properties[j].quantity);
             }
         }
     }
@@ -45,17 +48,19 @@ console.log(totalPrice)
 
 }
 
-async AddOrder(order: AddOrderDTO, token: string) {
+async AddOrder(orders: AddOrderDTO[], token: string) {
     const username = await this.jwtService.decode(token)?.username;
     const customer = await this.userService.findByUsername(username);
 
-    // if(!customer) {
-    //     throw new HttpException('Unauthorized :(', HttpStatus.UNAUTHORIZED)
-    // }
+    // console.log(username, customer, token)
+    if(!customer) {
+        throw new HttpException('Unauthorized :(', HttpStatus.UNAUTHORIZED)
+    }
 
-    // const [totalPrice, foundProducts] = await this.CalcTotalPrice(order);
+    const [totalPrice, foundProducts] = await this.CalcTotalPrice(orders);
 
-    // return await this.orderModel.create({ownerId: customer._id, products: foundProducts, totalPrice})
+    // console.log(totalPrice, foundProducts)
+    return await this.orderModel.create({ownerId: customer._id, products: orders, totalPrice})
 }
 
 }
