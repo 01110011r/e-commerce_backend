@@ -32,7 +32,7 @@ export class ProductController {
     @UseInterceptors(FileInterceptor('image', {
         storage: diskStorage({
             destination: './uploads',
-            filename: (req: Request<any>, file:Express.Multer.File, cb: any) => {
+            filename: (req: Request, file:Express.Multer.File, cb: any) => {
                 if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
                     return cb(new Error('Only image files are allowed!'), false);
                 }

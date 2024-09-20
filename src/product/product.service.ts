@@ -47,6 +47,7 @@ export class ProductService {
     }
 
     async Create(createProductDTO: CreateProductDTO, token: string, image: Express.Multer.File) {
+console.log(token);
 
         const username = this.jwtService.decode(token)?.username;
 
@@ -59,10 +60,19 @@ export class ProductService {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
 
-        createProductDTO.owner = user._id as string;
-        createProductDTO.img = image.filename;
+        // createProductDTO.owner = user;
+        if(image?.filename) createProductDTO.img = image.filename;
 
-        return await this.productModel.create({...createProductDTO, ownerId: user._id});
+        const product = await this.productModel.findOne({title: createProductDTO.title});
+
+        if(product&&product.title===createProductDTO.title&&product.owner._id===user._id) {
+
+            createProductDTO.quantity+=Number(product.quantity)
+
+            return await this.productModel.findOneAndUpdate(product._id, createProductDTO);
+        }
+
+        return await this.productModel.create({...createProductDTO, owner: user});
     }
 
 
@@ -78,7 +88,7 @@ export class ProductService {
 
         const product = await this.productModel.findById(id);
 
-        if(user?._id != product?.ownerId.toString()) {
+        if(user?._id != product?.owner.id.toString()) {
             throw new HttpException('You are not the owner of this product', HttpStatus.BAD_REQUEST);
         }
 
@@ -108,7 +118,7 @@ export class ProductService {
 
         const product = await this.productModel.findById(id);
 
-        if(user?._id != product?.ownerId.toString()) {
+        if(user?._id != product?.owner.id.toString()) {
             throw new HttpException('You are not the owner of this product.', HttpStatus.BAD_REQUEST);
         }
 

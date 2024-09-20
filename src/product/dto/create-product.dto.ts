@@ -13,12 +13,12 @@ export class CreateProductDTO {
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsNumberString()
+    @IsNumber()
     price: number;
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsNumberString()
+    @IsNumber()
     quantity: number;
 
     @ApiProperty()

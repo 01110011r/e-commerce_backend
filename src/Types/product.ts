@@ -2,11 +2,11 @@ import { Document } from "mongoose";
 import { UserType } from "./user";
 
 export interface ProductType extends Document {
-    name: String,
+    title: String,
     description: String,
     img: String,
     quantity: Number,
     price: Number,
-    measurment: ['kg', 'dona'],
-    ownerId: UserType
+    measurment: ['countable', 'kg', 'm'],
+    owner: UserType
 }
