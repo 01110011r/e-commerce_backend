@@ -28,8 +28,8 @@ export class UpdateProductDTO {
     @IsNotEmpty()
     measurement: ['countable', 'kg', 'm'];
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    owner: string;
+    // @ApiProperty()
+    // @IsNotEmpty()
+    // @IsString()
+    // owner: string;
 }

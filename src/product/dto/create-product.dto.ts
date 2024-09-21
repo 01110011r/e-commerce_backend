@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsNumberString, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDTO {
@@ -30,8 +30,8 @@ export class CreateProductDTO {
     @IsNotEmpty()
     measurement: ['countable', 'kg', 'm'];
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    owner: string;
+    // @ApiProperty()
+    // @IsNotEmpty()
+    // @IsString()
+    // owner: string;
 }

@@ -9,6 +9,7 @@ import { UpdateProductDTO } from './dto/update-product.dto';
 import { Express } from 'express';
 import * as fs from 'node:fs';
 import { QueryProductDto } from './dto/query-product.dto';
+import deleteFileIfExists from 'src/lib/deleteFileIfExists';
 
 
 @Injectable()
@@ -39,17 +40,17 @@ export class ProductService {
         return await this.productModel.find(queryObj)
           .limit(limit)
           .skip(skip)
-          .populate('ownerId', '-password').exec();
+          .populate('owner', '-password').exec();
     }
 
     async ShowOne(id:string) {
-        return await this.productModel.findById(id).populate('ownerId', '-password').exec();
+        return await this.productModel.findById(id).populate('owner', '-password').exec();
     }
 
     async Create(createProductDTO: CreateProductDTO, token: string, image: Express.Multer.File) {
 console.log(token);
 
-        const username = this.jwtService.decode(token)?.username;
+        const username =await this.jwtService.decode(token)?.username;
 
         if (!username) {
             throw new HttpException('Invalid or expired token provided.', HttpStatus.UNAUTHORIZED);
@@ -65,14 +66,14 @@ console.log(token);
 
         const product = await this.productModel.findOne({title: createProductDTO.title});
 
-        if(product&&product.title===createProductDTO.title&&product.owner._id===user._id) {
+        if(product&&product.title===createProductDTO.title&&product.owner?._id===user._id) {
 
             createProductDTO.quantity+=Number(product.quantity)
 
             return await this.productModel.findOneAndUpdate(product._id, createProductDTO);
         }
 
-        return await this.productModel.create({...createProductDTO, owner: user});
+        return await this.productModel.create({...createProductDTO, owner: user._id});
     }
 
 
@@ -93,13 +94,14 @@ console.log(token);
         }
 
         if(img) {
-            const product = await this.productModel.findById(id)
-            fs.unlink(`${__dirname}/../../uploads/${product?.img}`, (err) => {
-               if (err) {
-                   throw new HttpException('File could not be deleted', HttpStatus.BAD_REQUEST)
-               }
-            });
-        updateProductDTO.img = img.filename;
+            // fs.unlink(`${__dirname}/../../uploads/${product?.img}`, (err) => {
+            //    if (err) {
+            //        throw new HttpException('File could not be deleted', HttpStatus.BAD_REQUEST)
+            //    }
+            // });
+            deleteFileIfExists(String(product.img))
+        
+            updateProductDTO.img = img.filename;
         }
 
         return this.productModel.findByIdAndUpdate(id, updateProductDTO);
@@ -108,7 +110,7 @@ console.log(token);
 
 
     async Delete(id: string, token: string) {
-        const username = this.jwtService.decode(token)?.username;
+        const username = await this.jwtService.decode(token)?.username;
 
         if(!username) {
             throw new HttpException('Invalid or expired token provided.', HttpStatus.UNAUTHORIZED);
@@ -117,11 +119,21 @@ console.log(token);
         const user = await this.userService.findByUsername(username);
 
         const product = await this.productModel.findById(id);
+console.log(user);
+console.log(product);
 
-        if(user?._id != product?.owner.id.toString()) {
-            throw new HttpException('You are not the owner of this product.', HttpStatus.BAD_REQUEST);
+        if(!product) {
+            throw new HttpException('Product not found.', HttpStatus.NOT_FOUND);
         }
-
+        
+        if(user?._id != product?.owner?._id.toString()) {
+                throw new HttpException('You are not the owner of this product.', HttpStatus.BAD_REQUEST);
+            }
+            
+            if(product.img) {
+                deleteFileIfExists(String(product.img));
+            }
+            
         return this.productModel.findByIdAndDelete(id);
 
     }
