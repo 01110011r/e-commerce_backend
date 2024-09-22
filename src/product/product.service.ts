@@ -119,8 +119,8 @@ console.log(token);
         const user = await this.userService.findByUsername(username);
 
         const product = await this.productModel.findById(id);
-console.log(user);
-console.log(product);
+// console.log(user);
+// console.log(product);
 
         if(!product) {
             throw new HttpException('Product not found.', HttpStatus.NOT_FOUND);
@@ -131,7 +131,8 @@ console.log(product);
             }
             
             if(product.img) {
-                deleteFileIfExists(String(product.img));
+                const fullPath = `${__dirname}/../../uploads/${product?.img}`
+                deleteFileIfExists(fullPath);
             }
             
         return this.productModel.findByIdAndDelete(id);

@@ -5,7 +5,7 @@ import { SharedModule } from "src/shared/shared.module";
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
-import constants from "./constants";
+import configuration from "src/config/configuration";
 import { JwtStrategy } from "./jwt.strategy";
 
 
@@ -15,7 +15,7 @@ import { JwtStrategy } from "./jwt.strategy";
         SharedModule,
         PassportModule,
         JwtModule.register({
-            secret: constants().secret,
+            secret: configuration().jwt.secretorprivatekey,
             signOptions: { expiresIn: '30d' }
         })
     ],

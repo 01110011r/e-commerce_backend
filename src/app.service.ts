@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import constants from './auth/constants';
+import configuration from './config/configuration';
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'hello' + constants().secret;
+    return 'hello'+ configuration().jwt.secretorprivatekey;
   }
 }

@@ -1,7 +1,7 @@
 export default () => ({
     port: parseInt(process.env.PORT, 10) || 3000,
     jwt:{
-        sekretorprivatekey: process.env.SEKRETORKEY,
+        secretorprivatekey: process.env.SECRETORKEY,
     },
     db: {
         remote_db_url: process.env.REMOTE_DB_URL,

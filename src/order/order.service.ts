@@ -60,7 +60,7 @@ async AddOrder(orders: AddOrderDTO[], token: string) {
     const [totalPrice, foundProducts] = await this.CalcTotalPrice(orders);
 
     // console.log(totalPrice, foundProducts)
-    return await this.orderModel.create({ownerId: customer._id, products: orders, totalPrice})
+    return await this.orderModel.create({ownerId: customer._id, products: orders, totalPrice});
 }
 
 }

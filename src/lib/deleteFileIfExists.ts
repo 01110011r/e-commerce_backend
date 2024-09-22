@@ -1,24 +1,28 @@
-import path from "path";
-import * as fs from "fs";
-import { HttpException, HttpStatus } from "@nestjs/common";
+import * as path from "node:path";
+import * as fs from "node:fs";
 
 export default async function deleteFileIfExists(filePath: string): Promise<void> {
+  console.log(filePath);
 
-      const fullPath = path.resolve(filePath);
-  
-      await fs.access(fullPath, (error)=>{
-        if (error.code === 'ENOENT') {
-            console.log('Fayl mavjud emas:', filePath);
-          } else {
-            throw new HttpException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
-          }
-      });
-  
-      await fs.unlink(fullPath, (err) => {
+  const fullPath = path.resolve(filePath);
+
+  fs.access(fullPath, (error) => {
+    if(!error) {
+      fs.unlink(fullPath, (err) => {
         if (err) {
-            throw new HttpException('File could not be deleted', HttpStatus.BAD_REQUEST)
+          console.log('File unlink error: '+err);
+          
+        } else {
+          console.log('Fayl o\'chirildi:', fullPath);
         }
-     });
-      console.log('Fayl o\'chirildi:', fullPath);
+      });
+    } else if (error.code === 'ENOENT') {
+      console.log('Fayl mavjud emas:', filePath);
+    } else {
+      console.log('file access error: '+error);
+      
+    }
+  });
 
-  }
+
+}
