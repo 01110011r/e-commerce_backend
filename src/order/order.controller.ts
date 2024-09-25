@@ -10,14 +10,15 @@ export class OrderController {
     constructor(
         private orderService: OrderService
     ) {}
-
+//1. tranzaksiya.
+//2. orderni bekor qilish.
 
     @Post()
-    AddOrder(
+    async AddOrder(
         @Body() orders: AddOrderDTO[],
         @Headers('authorization') authToken: string
-    ) {
-        return this.orderService.AddOrder(orders, authToken);
+    ) {        
+        return await this.orderService.AddOrder(orders, authToken);
     }
 
 
