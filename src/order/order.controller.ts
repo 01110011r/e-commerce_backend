@@ -10,7 +10,7 @@ export class OrderController {
     constructor(
         private orderService: OrderService
     ) {}
-//1. tranzaksiya.
+//1. transaction.
 //2. orderni bekor qilish.
 
     @Post()
