@@ -1,4 +1,4 @@
-import {ClientSession, Connection} from "mongoose";
+import { ClientSession, Connection } from "mongoose";
 
 export const transaction = async <T>(connection: Connection, cb: (session: ClientSession) => Promise<T>): Promise<T> => {
 

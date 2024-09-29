@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { ProductType } from "src/Types/product";
@@ -7,7 +7,6 @@ import { UserService } from '../shared/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { Express } from 'express';
-import * as fs from 'node:fs';
 import { QueryProductDto } from './dto/query-product.dto';
 import deleteFileIfExists from 'src/lib/deleteFileIfExists';
 
@@ -137,6 +136,12 @@ console.log(token);
             
         return this.productModel.findByIdAndDelete(id);
 
+    }
+
+    async updateQuantity (id: string, quantity: Number) {
+        const res = this.productModel.updateOne({_id: id}, {quantity});
+        return res;
+        
     }
 
 }
